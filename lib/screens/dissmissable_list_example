@@ -55,32 +55,33 @@ class MyAppState extends State<MyApp> {
               background: Container(color: Colors.red),
               child: ListTile(
                 title: Text(item),
-              ),confirmDismiss: (DismissDirection direction) async {
-  return await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Confirm"),
-        content: const Text("Are you sure you wish to delete this item?"),
-        actions: <Widget>[
-          TextButton(
-  style: ButtonStyle(
-    foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
-  ),
-  onPressed: () => Navigator.of(context).pop(true),
-  child: const Text('DELETE'),
-),TextButton(
-  style: ButtonStyle(
-    foregroundColor: MaterialStateProperty.all<Color>(Colors.green),
-  ),
-  onPressed: () => Navigator.of(context).pop(false),
-  child: const Text('CANCEL'),
-),
-        ],
-      );
-    },
-  );
-},
+              ),
+              confirmDismiss: (DismissDirection direction) async {
+                return await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Confirm"),
+                      content: const Text("Are you sure you wish to delete this item?"),
+                      actions: <Widget>[
+                        TextButton(
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                          ),
+                          onPressed: () => Navigator.of(context).pop(true),
+                          child: const Text('DELETE'),
+                        ),TextButton(
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                          ),
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text('CANCEL'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
             );
           },
         ),

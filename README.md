@@ -1,4 +1,4 @@
-# lend_buddy
+# Lend Buddy
 
 Lended items multi-platform management app coded using flutter
 

@@ -1,9 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:lend_buddy/models/Category.dart';
+import 'package:lend_buddy/models/photo.dart';
+import 'package:lend_buddy/models/user.dart';
 
 class Item {
-  int id;
-  String borrowerName;
-  String image;
+  //attributes
+  int _id;
+  User _user;
+  Category _category;
+  Photo _photo;
+  String _libelle;
 
-  Item({required this.id, required this.borrowerName, required this.image});
+  Item(this._id, this._user, this._category, this._photo, this._libelle);
 }

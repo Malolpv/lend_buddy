@@ -1,13 +1,6 @@
-import 'package:flutter/material.dart';
-
 class User {
-  int id;
-  String name, surname, mail, pass;
+  int _id;
+  String _name, _surname, _mail, _pass;
 
-  User(
-      {required this.id,
-      required this.name,
-      required this.surname,
-      required this.mail,
-      required this.pass});
+  User(this._id, this._mail, this._pass, this._surname, this._name);
 }

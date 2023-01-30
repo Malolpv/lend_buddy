@@ -14,26 +14,9 @@ class HomeScreen extends StatelessWidget {
       appBar: const CustomAppBar(
         title: "Home",
       ),
-      body: Center(child: LendedItemsList()
-          // Column(
-          // children: [
-          // Container(
-          //   margin: const EdgeInsets.only(top: 20),
-          //   decoration: BoxDecoration(
-          //       borderRadius: BorderRadius.circular(50),
-          //       border: Border.all(color: secondaryBgColour.shade900)),
-          //   child: Icon(
-          //     Icons.add,
-          //     color: secondaryBgColour.shade900,
-          //     size: 35,
-          //   ),
-          // ),
-          // LendedItemContainer(
-          //   lendedItem: Item(id: 1, borrowerName: "Malo", image: "test"),
-          // )
-          // ],
-          // ),
-          ),
+      body: Center(
+        child: LendedItemsList(),
+      ),
     );
   }
 }

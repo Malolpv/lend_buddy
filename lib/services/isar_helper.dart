@@ -80,4 +80,9 @@ class IsarHelper {
     final isar = await db;
     return isar.contacts.filter().user((u) => u.idEqualTo(userId)).findAll();
   }
+
+  Future<User?> getUserByEmail(String email) async {
+    final isar = await db;
+    return isar.users.filter().mailEqualTo(email).findFirst();
+  }
 }

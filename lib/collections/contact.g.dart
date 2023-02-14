@@ -34,7 +34,14 @@ const ContactSchema = CollectionSchema(
   deserializeProp: _contactDeserializeProp,
   idName: r'id',
   indexes: {},
-  links: {},
+  links: {
+    r'user': LinkSchema(
+      id: -6100360314842169997,
+      name: r'user',
+      target: r'User',
+      single: true,
+    )
+  },
   embeddedSchemas: {},
   getId: _contactGetId,
   getLinks: _contactGetLinks,
@@ -107,11 +114,12 @@ Id _contactGetId(Contact object) {
 }
 
 List<IsarLinkBase<dynamic>> _contactGetLinks(Contact object) {
-  return [];
+  return [object.user];
 }
 
 void _contactAttach(IsarCollection<dynamic> col, Id id, Contact object) {
   object.id = id;
+  object.user.attach(col, col.isar.collection<User>(), r'user', id);
 }
 
 extension ContactQueryWhereSort on QueryBuilder<Contact, Contact, QWhere> {
@@ -540,7 +548,20 @@ extension ContactQueryObject
     on QueryBuilder<Contact, Contact, QFilterCondition> {}
 
 extension ContactQueryLinks
-    on QueryBuilder<Contact, Contact, QFilterCondition> {}
+    on QueryBuilder<Contact, Contact, QFilterCondition> {
+  QueryBuilder<Contact, Contact, QAfterFilterCondition> user(
+      FilterQuery<User> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'user');
+    });
+  }
+
+  QueryBuilder<Contact, Contact, QAfterFilterCondition> userIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'user', 0, true, 0, true);
+    });
+  }
+}
 
 extension ContactQuerySortBy on QueryBuilder<Contact, Contact, QSortBy> {
   QueryBuilder<Contact, Contact, QAfterSortBy> sortByName() {

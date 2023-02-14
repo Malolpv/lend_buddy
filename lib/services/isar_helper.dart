@@ -74,4 +74,10 @@ class IsarHelper {
     final isar = await db;
     return isar.lends.filter().user((u) => u.idEqualTo(userId)).findAll();
   }
+
+  //Get all contact by user
+  Future<List<Contact>> getAllContact() async {
+    final isar = await db;
+    return isar.contacts.filter().user((u) => u.idEqualTo(userId)).findAll();
+  }
 }

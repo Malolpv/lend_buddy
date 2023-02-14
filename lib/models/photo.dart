@@ -1,6 +1,11 @@
-class Photo {
-  int _id;
-  String _path;
+import 'package:isar/isar.dart';
 
-  Photo(this._id, this._path);
+part 'photo.g.dart';
+
+@collection
+class Photo {
+  Id id = Isar.autoIncrement;
+  String? path;
+
+  // Photo(this._id, this._path);
 }

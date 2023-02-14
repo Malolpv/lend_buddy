@@ -1,14 +1,20 @@
-import 'package:lend_buddy/models/Category.dart';
+import 'package:isar/isar.dart';
+import 'package:lend_buddy/models/category.dart';
 import 'package:lend_buddy/models/photo.dart';
 import 'package:lend_buddy/models/user.dart';
 
+part 'item.g.dart';
+
+@collection
 class Item {
   //attributes
-  int _id;
-  User _user;
-  Category _category;
-  Photo _photo;
-  String _libelle;
+  Id id = Isar.autoIncrement;
 
-  Item(this._id, this._user, this._category, this._photo, this._libelle);
+  final user = IsarLink<User>();
+
+  final category = IsarLink<Category>();
+  final photo = IsarLink<Photo>();
+  String? libelle;
+
+  //Item(this.id, this.user, this.category, this.photo, this.libelle);
 }

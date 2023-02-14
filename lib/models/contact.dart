@@ -1,6 +1,11 @@
-class Contact {
-  int _id;
-  String _name, _surname;
+import 'package:isar/isar.dart';
 
-  Contact(this._id, this._name, this._surname);
+part 'contact.g.dart';
+
+@collection
+class Contact {
+  Id id = Isar.autoIncrement;
+  String? name, surname;
+
+  // Contact(this._id, this._name, this._surname);
 }

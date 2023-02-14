@@ -1,6 +1,11 @@
-class Category {
-  int _id;
-  String _libelle;
+import 'package:isar/isar.dart';
 
-  Category(this._id, this._libelle);
+part 'category.g.dart';
+
+@collection
+class Category {
+  Id id = Isar.autoIncrement;
+  String? libelle;
+
+  // Category(this._id, this._libelle);
 }

@@ -1,6 +1,11 @@
-class User {
-  int _id;
-  String _name, _surname, _mail, _pass;
+import 'package:isar/isar.dart';
 
-  User(this._id, this._mail, this._pass, this._surname, this._name);
+part 'user.g.dart';
+
+@collection
+class User {
+  Id id = Isar.autoIncrement;
+  String? name, surname, mail, pass;
+
+  //User(this.id, this.mail, this.pass, this.surname, this.name);
 }

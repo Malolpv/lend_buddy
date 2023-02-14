@@ -12,8 +12,14 @@ class SqliteService {
       join(path, 'database.db'),
       onCreate: (database, version) async {
         await database.execute(
-          //TODO REFAIRE LA CREATION DE LA DB
-          "CREATE TABLE Notes(id INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT NOT NULL)",
+          '''
+            CREATE TABLE Users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, surname TEXT NOT NULL, mail TEXT NOT NULL,pass TEXT NOT NULL);
+            CREATE TABLE Items(id INTEGER PRIMARY KEY AUTOINCREMENT, libelle TEXT NOT NULL ,id_user INTEGER FOREIGN KEY REFERENCES Users(id), id_category INTEGER FOREIGN KEY Category(id_category) )
+            CREATE TABLE Lend(id INTEGER PRIMARY KEY AUTOINCREMENT)
+            CREATE TABLE Contact(id INTEGER PRIMARY KEY AUTOINCREMENT)
+            CREATE TABLE Photo(id INTEGER PRIMARY KEY AUTOINCREMENT)
+            CREATE TABLE Category(id INTEGER PRIMARY KEY AUTOINCREMENT)
+          ''',
         );
       },
       version: 1,

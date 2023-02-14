@@ -1,20 +1,24 @@
-import 'package:lend_buddy/models/Contact.dart';
-import 'package:lend_buddy/models/Item.dart';
+import 'package:isar/isar.dart';
+import 'package:lend_buddy/models/contact.dart';
+import 'package:lend_buddy/models/item.dart';
 import 'package:lend_buddy/models/photo.dart';
 import 'package:lend_buddy/models/user.dart';
 
+part 'lend.g.dart';
+
+@collection
 class Lend {
   //attributes
-  int _id;
+  Id id = Isar.autoIncrement;
 
-  Item _item;
-  User _user;
-  Photo _photo;
-  Contact _contact;
+  final item = IsarLink<Item>();
+  final user = IsarLink<User>();
+  final photo = IsarLink<Photo>();
+  final contact = IsarLink<Contact>();
 
-  DateTime _startDate, _endDate;
+  DateTime? startDate, endDate;
 
   //Constructor
-  Lend(this._id, this._item, this._contact, this._user, this._startDate,
-      this._endDate, this._photo);
+  //Lend(this._id, this._item, this._contact, this._user, this._startDate,
+  //   this._endDate, this._photo);
 }

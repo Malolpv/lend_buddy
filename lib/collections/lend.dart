@@ -16,9 +16,12 @@ class Lend {
   final photo = IsarLink<Photo>();
   final contact = IsarLink<Contact>();
 
+  bool isReturned = false;
   DateTime? startDate, endDate;
 
   //Constructor
   //Lend(this._id, this._item, this._contact, this._user, this._startDate,
   //   this._endDate, this._photo);
+
+  void returned() => isReturned = true;
 }

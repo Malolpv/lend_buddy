@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lend_buddy/screens/home_screen.dart';
+import 'package:lend_buddy/services/isar_helper.dart';
 
 //import side menu
 import 'package:lend_buddy/widgets/navdrawer.dart';
@@ -11,6 +12,8 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  //TODO LA CONNEXION DOIT SET L ID USER
+  final idUser = 1;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: const MyHomePage(title: 'Lend Buddy Home Page'),
-      home: HomeScreen(),
+      home: HomeScreen(userId: idUser),
     );
   }
 }

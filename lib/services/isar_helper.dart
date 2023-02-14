@@ -9,9 +9,8 @@ import 'package:path/path.dart';
 
 class IsarHelper {
   late Future<Isar> db;
-  late int userId;
 
-  IsarHelper(this.userId) {
+  IsarHelper() {
     db = openDb();
   }
 
@@ -31,36 +30,36 @@ class IsarHelper {
 
   Future<void> saveUser(User user) async {
     final isar = await db;
-    isar.writeTxn<int>(() => isar.users.put(user));
+    isar.writeTxnSync<int>(() => isar.users.putSync(user));
   }
 
   Future<void> saveItem(Item item) async {
     final isar = await db;
-    isar.writeTxn<int>(() => isar.items.put(item));
+    isar.writeTxnSync<int>(() => isar.items.putSync(item));
   }
 
   Future<void> saveLend(Lend lend) async {
     final isar = await db;
-    isar.writeTxn<int>(() => isar.lends.put(lend));
+    isar.writeTxnSync<int>(() => isar.lends.putSync(lend));
   }
 
   Future<void> saveContact(Contact contact) async {
     final isar = await db;
-    isar.writeTxn<int>(() => isar.contacts.put(contact));
+    isar.writeTxnSync<int>(() => isar.contacts.putSync(contact));
   }
 
   Future<void> saveCategory(Category category) async {
     final isar = await db;
-    isar.writeTxn<int>(() => isar.categorys.put(category));
+    isar.writeTxnSync<int>(() => isar.categorys.putSync(category));
   }
 
   Future<void> savePhoto(Photo photo) async {
     final isar = await db;
-    isar.writeTxn<int>(() => isar.photos.put(photo));
+    isar.writeTxnSync<int>(() => isar.photos.putSync(photo));
   }
 
   //Get all items by user
-  Future<List<Item>> getAllItems() async {
+  Future<List<Item>> getAllItems(int userId) async {
     final isar = await db;
     return isar.items
         .where()
@@ -69,14 +68,20 @@ class IsarHelper {
         .findAll();
   }
 
-  //Get all lend by user
-  Future<List<Lend>> getAllLend() async {
+  //Get all lend active by user
+  Future<List<Lend>> getAllActiveLend(int userId) async {
     final isar = await db;
-    return isar.lends.filter().user((u) => u.idEqualTo(userId)).findAll();
+    return isar.lends
+        .where()
+        .filter()
+        .user((u) => u.idEqualTo(userId))
+        .and()
+        .isReturnedEqualTo(false)
+        .findAll();
   }
 
   //Get all contact by user
-  Future<List<Contact>> getAllContact() async {
+  Future<List<Contact>> getAllContact(int userId) async {
     final isar = await db;
     return isar.contacts.filter().user((u) => u.idEqualTo(userId)).findAll();
   }
@@ -85,5 +90,15 @@ class IsarHelper {
   Future<User?> getUserByEmail(String email) async {
     final isar = await db;
     return isar.users.filter().mailEqualTo(email).findFirst();
+  }
+
+  Future<User?> getUserById(int idUser) async {
+    final isar = await db;
+    return isar.users.filter().idEqualTo(idUser).findFirst();
+  }
+
+  Future<bool> deleteLend(int id) async {
+    final isar = await db;
+    return isar.lends.delete(id);
   }
 }

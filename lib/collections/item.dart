@@ -14,7 +14,7 @@ class Item {
 
   final category = IsarLink<Category>();
   final photo = IsarLink<Photo>();
-  String? libelle;
+  String libelle = "";
 
   //Item(this.id, this.user, this.category, this.photo, this.libelle);
 }

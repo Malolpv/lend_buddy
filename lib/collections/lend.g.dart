@@ -22,8 +22,13 @@ const LendSchema = CollectionSchema(
       name: r'endDate',
       type: IsarType.dateTime,
     ),
-    r'startDate': PropertySchema(
+    r'isReturned': PropertySchema(
       id: 1,
+      name: r'isReturned',
+      type: IsarType.bool,
+    ),
+    r'startDate': PropertySchema(
+      id: 2,
       name: r'startDate',
       type: IsarType.dateTime,
     )
@@ -83,7 +88,8 @@ void _lendSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDateTime(offsets[0], object.endDate);
-  writer.writeDateTime(offsets[1], object.startDate);
+  writer.writeBool(offsets[1], object.isReturned);
+  writer.writeDateTime(offsets[2], object.startDate);
 }
 
 Lend _lendDeserialize(
@@ -95,7 +101,8 @@ Lend _lendDeserialize(
   final object = Lend();
   object.endDate = reader.readDateTimeOrNull(offsets[0]);
   object.id = id;
-  object.startDate = reader.readDateTimeOrNull(offsets[1]);
+  object.isReturned = reader.readBool(offsets[1]);
+  object.startDate = reader.readDateTimeOrNull(offsets[2]);
   return object;
 }
 
@@ -109,6 +116,8 @@ P _lendDeserializeProp<P>(
     case 0:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 1:
+      return (reader.readBool(offset)) as P;
+    case 2:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -328,6 +337,16 @@ extension LendQueryFilter on QueryBuilder<Lend, Lend, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> isReturnedEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isReturned',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Lend, Lend, QAfterFilterCondition> startDateIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -464,6 +483,18 @@ extension LendQuerySortBy on QueryBuilder<Lend, Lend, QSortBy> {
     });
   }
 
+  QueryBuilder<Lend, Lend, QAfterSortBy> sortByIsReturned() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isReturned', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterSortBy> sortByIsReturnedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isReturned', Sort.desc);
+    });
+  }
+
   QueryBuilder<Lend, Lend, QAfterSortBy> sortByStartDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'startDate', Sort.asc);
@@ -502,6 +533,18 @@ extension LendQuerySortThenBy on QueryBuilder<Lend, Lend, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Lend, Lend, QAfterSortBy> thenByIsReturned() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isReturned', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterSortBy> thenByIsReturnedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isReturned', Sort.desc);
+    });
+  }
+
   QueryBuilder<Lend, Lend, QAfterSortBy> thenByStartDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'startDate', Sort.asc);
@@ -522,6 +565,12 @@ extension LendQueryWhereDistinct on QueryBuilder<Lend, Lend, QDistinct> {
     });
   }
 
+  QueryBuilder<Lend, Lend, QDistinct> distinctByIsReturned() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isReturned');
+    });
+  }
+
   QueryBuilder<Lend, Lend, QDistinct> distinctByStartDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'startDate');
@@ -539,6 +588,12 @@ extension LendQueryProperty on QueryBuilder<Lend, Lend, QQueryProperty> {
   QueryBuilder<Lend, DateTime?, QQueryOperations> endDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'endDate');
+    });
+  }
+
+  QueryBuilder<Lend, bool, QQueryOperations> isReturnedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isReturned');
     });
   }
 

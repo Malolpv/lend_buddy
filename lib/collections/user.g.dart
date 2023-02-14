@@ -43,7 +43,21 @@ const UserSchema = CollectionSchema(
   deserialize: _userDeserialize,
   deserializeProp: _userDeserializeProp,
   idName: r'id',
-  indexes: {},
+  indexes: {
+    r'mail': IndexSchema(
+      id: 4298297509709462591,
+      name: r'mail',
+      unique: true,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'mail',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
   links: {},
   embeddedSchemas: {},
   getId: _userGetId,
@@ -144,6 +158,60 @@ void _userAttach(IsarCollection<dynamic> col, Id id, User object) {
   object.id = id;
 }
 
+extension UserByIndex on IsarCollection<User> {
+  Future<User?> getByMail(String? mail) {
+    return getByIndex(r'mail', [mail]);
+  }
+
+  User? getByMailSync(String? mail) {
+    return getByIndexSync(r'mail', [mail]);
+  }
+
+  Future<bool> deleteByMail(String? mail) {
+    return deleteByIndex(r'mail', [mail]);
+  }
+
+  bool deleteByMailSync(String? mail) {
+    return deleteByIndexSync(r'mail', [mail]);
+  }
+
+  Future<List<User?>> getAllByMail(List<String?> mailValues) {
+    final values = mailValues.map((e) => [e]).toList();
+    return getAllByIndex(r'mail', values);
+  }
+
+  List<User?> getAllByMailSync(List<String?> mailValues) {
+    final values = mailValues.map((e) => [e]).toList();
+    return getAllByIndexSync(r'mail', values);
+  }
+
+  Future<int> deleteAllByMail(List<String?> mailValues) {
+    final values = mailValues.map((e) => [e]).toList();
+    return deleteAllByIndex(r'mail', values);
+  }
+
+  int deleteAllByMailSync(List<String?> mailValues) {
+    final values = mailValues.map((e) => [e]).toList();
+    return deleteAllByIndexSync(r'mail', values);
+  }
+
+  Future<Id> putByMail(User object) {
+    return putByIndex(r'mail', object);
+  }
+
+  Id putByMailSync(User object, {bool saveLinks = true}) {
+    return putByIndexSync(r'mail', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllByMail(List<User> objects) {
+    return putAllByIndex(r'mail', objects);
+  }
+
+  List<Id> putAllByMailSync(List<User> objects, {bool saveLinks = true}) {
+    return putAllByIndexSync(r'mail', objects, saveLinks: saveLinks);
+  }
+}
+
 extension UserQueryWhereSort on QueryBuilder<User, User, QWhere> {
   QueryBuilder<User, User, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
@@ -215,6 +283,69 @@ extension UserQueryWhere on QueryBuilder<User, User, QWhereClause> {
         upper: upperId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterWhereClause> mailIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'mail',
+        value: [null],
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterWhereClause> mailIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'mail',
+        lower: [null],
+        includeLower: false,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterWhereClause> mailEqualTo(String? mail) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'mail',
+        value: [mail],
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterWhereClause> mailNotEqualTo(String? mail) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'mail',
+              lower: [],
+              upper: [mail],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'mail',
+              lower: [mail],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'mail',
+              lower: [mail],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'mail',
+              lower: [],
+              upper: [mail],
+              includeUpper: false,
+            ));
+      }
     });
   }
 }

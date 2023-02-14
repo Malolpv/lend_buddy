@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:lend_buddy/collections/lend.dart';
+import 'package:lend_buddy/services/isar_helper.dart';
 
 class LendedItemsList extends StatelessWidget {
-  final items = List<String>.generate(20, (i) => 'Item ${i + 1}');
+  // final items = List<String>.generate(20, (i) => 'Item ${i + 1}');
+  final IsarHelper dataSource;
+  final int userId;
+  late List<Lend> itemsLended;
+  LendedItemsList({super.key, required this.dataSource, required this.userId}) {
+    initializeData();
+  }
 
-  LendedItemsList({super.key});
+  void initializeData() async {
+    itemsLended = await dataSource.getAllActiveLend(userId);
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: items.length,
+      itemCount: itemsLended.length,
       itemBuilder: (context, index) {
-        final item = items[index];
+        final item = itemsLended[index];
         return Dismissible(
           // Each Dismissible must contain a Key. Keys allow Flutter to
           // uniquely identify widgets.
-          key: Key(item),
+          key: Key(item.id.toString()),
           // Provide a function that tells the app
           // what to do after an item has been swiped away.
           onDismissed: (direction) {
@@ -22,7 +32,7 @@ class LendedItemsList extends StatelessWidget {
             // setState(() {
             //   items.removeAt(index);
             // });
-            items.removeAt(index);
+            itemsLended.removeAt(index);
             // Then show a snackbar.
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text('$item dismissed')));
@@ -41,7 +51,7 @@ class LendedItemsList extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Row(
-              children: [Text(item)],
+              children: [Text(item.item.value!.libelle)],
             ),
           ),
           confirmDismiss: (DismissDirection direction) async {
@@ -58,7 +68,11 @@ class LendedItemsList extends StatelessWidget {
                         foregroundColor:
                             MaterialStateProperty.all<Color>(Colors.red),
                       ),
-                      onPressed: () => Navigator.of(context).pop(true),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                        dataSource.deleteLend(item.id);
+                        itemsLended.removeAt(index);
+                      },
                       child: const Text('DELETE'),
                     ),
                     TextButton(
@@ -66,7 +80,12 @@ class LendedItemsList extends StatelessWidget {
                         foregroundColor:
                             MaterialStateProperty.all<Color>(Colors.green),
                       ),
-                      onPressed: () => Navigator.of(context).pop(false),
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                        item.returned();
+                        dataSource.saveLend(item);
+                        itemsLended.removeAt(index);
+                      },
                       child: const Text('CANCEL'),
                     ),
                   ],

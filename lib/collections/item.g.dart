@@ -62,12 +62,7 @@ int _itemEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  {
-    final value = object.libelle;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  bytesCount += 3 + object.libelle.length * 3;
   return bytesCount;
 }
 
@@ -88,7 +83,7 @@ Item _itemDeserialize(
 ) {
   final object = Item();
   object.id = id;
-  object.libelle = reader.readStringOrNull(offsets[0]);
+  object.libelle = reader.readString(offsets[0]);
   return object;
 }
 
@@ -100,7 +95,7 @@ P _itemDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -249,24 +244,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> libelleIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'libelle',
-      ));
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> libelleIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'libelle',
-      ));
-    });
-  }
-
   QueryBuilder<Item, Item, QAfterFilterCondition> libelleEqualTo(
-    String? value, {
+    String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -279,7 +258,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
   }
 
   QueryBuilder<Item, Item, QAfterFilterCondition> libelleGreaterThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -294,7 +273,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
   }
 
   QueryBuilder<Item, Item, QAfterFilterCondition> libelleLessThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -309,8 +288,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
   }
 
   QueryBuilder<Item, Item, QAfterFilterCondition> libelleBetween(
-    String? lower,
-    String? upper, {
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -491,7 +470,7 @@ extension ItemQueryProperty on QueryBuilder<Item, Item, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> libelleProperty() {
+  QueryBuilder<Item, String, QQueryOperations> libelleProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'libelle');
     });

@@ -81,6 +81,7 @@ class IsarHelper {
     return isar.contacts.filter().user((u) => u.idEqualTo(userId)).findAll();
   }
 
+  //Get the User with given Email
   Future<User?> getUserByEmail(String email) async {
     final isar = await db;
     return isar.users.filter().mailEqualTo(email).findFirst();

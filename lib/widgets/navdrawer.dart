@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:lend_buddy/main.dart';
+import 'package:lend_buddy/screens/home_screen.dart';
 
 class NavDrawer extends StatelessWidget {
+  
+  //TODO LA CONNEXION DOIT SET L ID USER
+  final idUser = 1;
+  
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -21,27 +27,12 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),
-            onTap: () => {},
+            onTap: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(userId: idUser)))},
           ),
           ListTile(
-            leading: const Icon(Icons.book),
-            title: const Text('Lended items'),
-            onTap: () => {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.backpack),
-            title: const Text('My items'),
-            onTap: () => {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('Profile'),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Profile'),
-            onTap: () => {Navigator.of(context).pop()},
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            onTap: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp()))},
           ),
         ],
       ),

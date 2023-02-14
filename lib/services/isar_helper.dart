@@ -9,8 +9,9 @@ import 'package:path/path.dart';
 
 class IsarHelper {
   late Future<Isar> db;
+  late int userId;
 
-  IsarHelper() {
+  IsarHelper(this.userId) {
     db = openDb();
   }
 
@@ -33,8 +34,44 @@ class IsarHelper {
     isar.writeTxn<int>(() => isar.users.put(user));
   }
 
-  // Future<List<Lend>> getAllLended() async {
-  //   final isar = await db;
-  //   isar.lends
-  // }
+  Future<void> saveItem(Item item) async {
+    final isar = await db;
+    isar.writeTxn<int>(() => isar.items.put(item));
+  }
+
+  Future<void> saveLend(Lend lend) async {
+    final isar = await db;
+    isar.writeTxn<int>(() => isar.lends.put(lend));
+  }
+
+  Future<void> saveContact(Contact contact) async {
+    final isar = await db;
+    isar.writeTxn<int>(() => isar.contacts.put(contact));
+  }
+
+  Future<void> saveCategory(Category category) async {
+    final isar = await db;
+    isar.writeTxn<int>(() => isar.categorys.put(category));
+  }
+
+  Future<void> savePhoto(Photo photo) async {
+    final isar = await db;
+    isar.writeTxn<int>(() => isar.photos.put(photo));
+  }
+
+  //Get all items by user
+  Future<List<Item>> getAllItems() async {
+    final isar = await db;
+    return isar.items
+        .where()
+        .filter()
+        .user((u) => u.idEqualTo(userId))
+        .findAll();
+  }
+
+  //Get all lend by user
+  Future<List<Lend>> getAllLend() async {
+    final isar = await db;
+    return isar.lends.filter().user((u) => u.idEqualTo(userId)).findAll();
+  }
 }

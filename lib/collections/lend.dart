@@ -1,8 +1,8 @@
 import 'package:isar/isar.dart';
-import 'package:lend_buddy/models/contact.dart';
-import 'package:lend_buddy/models/item.dart';
-import 'package:lend_buddy/models/photo.dart';
-import 'package:lend_buddy/models/user.dart';
+import 'package:lend_buddy/collections/contact.dart';
+import 'package:lend_buddy/collections/item.dart';
+import 'package:lend_buddy/collections/photo.dart';
+import 'package:lend_buddy/collections/user.dart';
 
 part 'lend.g.dart';
 

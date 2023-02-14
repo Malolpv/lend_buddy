@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lend_buddy/constants.dart';
 import 'package:lend_buddy/screens/home_screen.dart';
 
 //import side menu
 import 'package:lend_buddy/widgets/navdrawer.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 

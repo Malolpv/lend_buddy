@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lend_buddy/constants.dart';
-import 'package:lend_buddy/models/Item.dart';
 import 'package:lend_buddy/widgets/custom_app_bar.dart';
-import 'package:lend_buddy/widgets/lended_item_container.dart';
 import 'package:lend_buddy/widgets/navdrawer.dart';
 import 'package:lend_buddy/widgets/lended_items_list.dart';
 

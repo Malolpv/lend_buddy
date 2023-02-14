@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lend_buddy/models/Item.dart';
+import 'package:lend_buddy/collections/Item.dart';
 
 class LendedItemContainer extends StatelessWidget {
   final Item lendedItem;

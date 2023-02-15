@@ -27,7 +27,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
+      drawer: NavDrawer(
+        idUser: userId,
+      ),
       appBar: const CustomAppBar(
         title: "Home",
       ),
@@ -70,8 +72,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: LendedItemsList(
-                itemsLended: itemsLend, dataSource: db, userId: userId),
+            child: LendedItemsList(dataSource: db, userId: userId),
           ),
         ],
       ),

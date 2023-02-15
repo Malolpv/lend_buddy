@@ -2,104 +2,135 @@ import 'package:flutter/material.dart';
 import 'package:lend_buddy/collections/lend.dart';
 import 'package:lend_buddy/services/isar_helper.dart';
 
-class LendedItemsList extends StatelessWidget {
+class LendedItemsList extends StatefulWidget {
   // final items = List<String>.generate(20, (i) => 'Item ${i + 1}');
   final IsarHelper dataSource;
   final int userId;
-  List<Lend> itemsLended;
+  //List<Lend> itemsLended;
   LendedItemsList(
       {super.key,
-      required this.itemsLended,
+      //required this.itemsLended,
       required this.dataSource,
       required this.userId}) {
     //initializeData();
   }
+  @override
+  State<LendedItemsList> createState() => _LendedItemsList();
 
-  void initializeData() async {
-    itemsLended = await dataSource.getAllActiveLend(userId);
+  Future<List<Lend>> initializeData() async {
+    return await dataSource.getAllActiveLend(userId);
+  }
+}
+
+class _LendedItemsList extends State<LendedItemsList> {
+  List<Lend> _lendItems = [];
+  _fetchListItems() async {
+    List rawLendList = await widget.dataSource.getAllActiveLend(widget.userId);
+    setState(() {
+      rawLendList.forEach((item) {
+        _lendItems.add(item);
+      });
+    });
+    return _lendItems;
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: itemsLended.length,
-      itemBuilder: (context, index) {
-        final item = itemsLended[index];
-        return Dismissible(
-          // Each Dismissible must contain a Key. Keys allow Flutter to
-          // uniquely identify widgets.
-          key: Key(item.id.toString()),
-          // Provide a function that tells the app
-          // what to do after an item has been swiped away.
-          onDismissed: (direction) {
-            // Remove the item from the data source.
-            // setState(() {
-            //   items.removeAt(index);
-            // });
-            itemsLended.removeAt(index);
-            // Then show a snackbar.
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text('$item dismissed')));
-          },
-          // Show a red background as the item is swiped away to the rigth.
-          background: slideRightBackground(),
-          // Show a red background as the item is swiped away to the left.
-          secondaryBackground: slideLeftBackground(),
-          child: Container(
-            margin:
-                const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-            padding: const EdgeInsets.all(20),
-            height: 180,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Row(
-              children: [Text(item.item.value!.libelle)],
-            ),
-          ),
-          confirmDismiss: (DismissDirection direction) async {
-            return await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text("Confirm"),
-                  content:
-                      const Text("Are you sure you wish to delete this item?"),
-                  actions: <Widget>[
-                    TextButton(
-                      style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                        dataSource.deleteLend(item.id);
-                        itemsLended.removeAt(index);
-                      },
-                      child: const Text('DELETE'),
+    return FutureBuilder(
+        future: _fetchListItems(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return ListView.builder(
+              itemCount: _lendItems.length,
+              itemBuilder: (context, index) {
+                final item = _lendItems[index];
+                return Dismissible(
+                  // Each Dismissible must contain a Key. Keys allow Flutter to
+                  // uniquely identify widgets.
+                  key: Key(item.id.toString()),
+                  // Provide a function that tells the app
+                  // what to do after an item has been swiped away.
+                  onDismissed: (direction) {
+                    // Remove the item from the data source.
+                    // setState(() {
+                    //   items.removeAt(index);
+                    // });
+                    _lendItems.removeAt(index);
+                    // Then show a snackbar.
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content:
+                            Text('${item.item.value?.libelle} dismissed')));
+                  },
+                  // Show a red background as the item is swiped away to the rigth.
+                  background: slideRightBackground(),
+                  // Show a red background as the item is swiped away to the left.
+                  secondaryBackground: slideLeftBackground(),
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        top: 10, left: 10, right: 10, bottom: 10),
+                    padding: const EdgeInsets.all(20),
+                    height: 180,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    TextButton(
-                      style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                        item.returned();
-                        dataSource.saveLend(item);
-                        itemsLended.removeAt(index);
-                      },
-                      child: const Text('CANCEL'),
+                    child: Column(
+                      children: [
+                        Text(item.item.value!.libelle),
+                        Text(
+                            "Prêté à ${item.user.value?.name} ${item.user.value?.surname}"),
+                        Text("Date de rendu " + item.endDate.toString())
+                      ],
                     ),
-                  ],
+                  ),
+                  confirmDismiss: (DismissDirection direction) async {
+                    return await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Confirm"),
+                          content: const Text(
+                              "Are you sure you wish to delete this item?"),
+                          actions: <Widget>[
+                            TextButton(
+                              style: ButtonStyle(
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.red),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                                widget.dataSource.deleteLend(item.id);
+                                _lendItems.removeAt(index);
+                              },
+                              child: const Text('DELETE'),
+                            ),
+                            TextButton(
+                              style: ButtonStyle(
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.green),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                                item.returned();
+                                widget.dataSource.saveLend(item);
+                                _lendItems.removeAt(index);
+                              },
+                              child: const Text('CANCEL'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 );
               },
             );
-          },
-        );
-      },
-    );
+          }
+        });
   }
 }
 

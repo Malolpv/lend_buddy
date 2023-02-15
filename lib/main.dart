@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
 import 'package:lend_buddy/screens/home_screen.dart';
 import 'package:lend_buddy/services/isar_helper.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   //TODO LA CONNEXION DOIT SET L ID USER
-  final idUser = 1;
+  final idUser = 46322301;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

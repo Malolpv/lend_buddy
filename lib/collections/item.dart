@@ -10,10 +10,8 @@ class Item {
   //attributes
   Id id = Isar.autoIncrement;
 
-  final user = IsarLink<User>();
+  IsarLink<User> user = IsarLink<User>();
 
-  final category = IsarLink<Category>();
-  final photo = IsarLink<Photo>();
   String libelle = "";
 
   //Item(this.id, this.user, this.category, this.photo, this.libelle);

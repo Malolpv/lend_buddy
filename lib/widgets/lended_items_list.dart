@@ -6,7 +6,7 @@ class LendedItemsList extends StatelessWidget {
   // final items = List<String>.generate(20, (i) => 'Item ${i + 1}');
   final IsarHelper dataSource;
   final int userId;
-  late List<Lend> itemsLended;
+  List<Lend> itemsLended = [];
   LendedItemsList({super.key, required this.dataSource, required this.userId}) {
     initializeData();
   }

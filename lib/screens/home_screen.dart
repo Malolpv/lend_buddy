@@ -28,20 +28,25 @@ class HomeScreen extends StatelessWidget {
         title: "Home",
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             height: 100,
             alignment: Alignment.center,
             decoration: const BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(15),
                     bottomRight: Radius.circular(15))),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: const [Text("Add")],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                         onPressed: () {
@@ -60,7 +65,9 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          LendedItemsList(dataSource: db, userId: userId),
+          Expanded(
+            child: LendedItemsList(dataSource: db, userId: userId),
+          ),
         ],
       ),
     );

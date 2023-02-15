@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lend_buddy/collections/lend.dart';
 import 'package:lend_buddy/collections/user.dart';
 import 'package:lend_buddy/screens/new_lend.dart';
 import 'package:lend_buddy/services/isar_helper.dart';
@@ -12,12 +13,15 @@ class HomeScreen extends StatelessWidget {
 
   late User? user;
 
+  List<Lend> itemsLend = [];
+
   HomeScreen({super.key, required this.userId}) {
     initializeData(userId);
   }
 
   void initializeData(int userId) async {
     user = await db.getUserById(userId);
+    itemsLend = await db.getAllActiveLend(userId);
   }
 
   @override
@@ -34,7 +38,7 @@ class HomeScreen extends StatelessWidget {
             height: 100,
             alignment: Alignment.center,
             decoration: const BoxDecoration(
-                color: Colors.white,
+                color: Colors.white70,
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(15),
                     bottomRight: Radius.circular(15))),
@@ -66,7 +70,8 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: LendedItemsList(dataSource: db, userId: userId),
+            child: LendedItemsList(
+                itemsLended: itemsLend, dataSource: db, userId: userId),
           ),
         ],
       ),

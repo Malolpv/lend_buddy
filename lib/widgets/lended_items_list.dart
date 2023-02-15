@@ -25,11 +25,13 @@ class LendedItemsList extends StatefulWidget {
 class _LendedItemsList extends State<LendedItemsList> {
   List<Lend> _lendItems = [];
   _fetchListItems() async {
-    List rawLendList = await widget.dataSource.getAllActiveLend(widget.userId);
+    List<Lend> rawLendList =
+        await widget.dataSource.getAllActiveLend(widget.userId);
     setState(() {
-      rawLendList.forEach((item) {
-        _lendItems.add(item);
-      });
+      // rawLendList.forEach((item) {
+      //   _lendItems.add(item);
+      // });
+      _lendItems = rawLendList;
     });
     return _lendItems;
   }
@@ -105,7 +107,7 @@ class _LendedItemsList extends State<LendedItemsList> {
                                 widget.dataSource.deleteLend(item.id);
                                 _lendItems.removeAt(index);
                               },
-                              child: const Text('DELETE'),
+                              child: const Text('OK'),
                             ),
                             TextButton(
                               style: ButtonStyle(

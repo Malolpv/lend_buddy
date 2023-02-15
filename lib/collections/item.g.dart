@@ -35,18 +35,6 @@ const ItemSchema = CollectionSchema(
       name: r'user',
       target: r'User',
       single: true,
-    ),
-    r'category': LinkSchema(
-      id: -1059489203734757626,
-      name: r'category',
-      target: r'Category',
-      single: true,
-    ),
-    r'photo': LinkSchema(
-      id: 7671630650592883092,
-      name: r'photo',
-      target: r'Photo',
-      single: true,
     )
   },
   embeddedSchemas: {},
@@ -106,14 +94,12 @@ Id _itemGetId(Item object) {
 }
 
 List<IsarLinkBase<dynamic>> _itemGetLinks(Item object) {
-  return [object.user, object.category, object.photo];
+  return [object.user];
 }
 
 void _itemAttach(IsarCollection<dynamic> col, Id id, Item object) {
   object.id = id;
   object.user.attach(col, col.isar.collection<User>(), r'user', id);
-  object.category.attach(col, col.isar.collection<Category>(), r'category', id);
-  object.photo.attach(col, col.isar.collection<Photo>(), r'photo', id);
 }
 
 extension ItemQueryWhereSort on QueryBuilder<Item, Item, QWhere> {
@@ -385,31 +371,6 @@ extension ItemQueryLinks on QueryBuilder<Item, Item, QFilterCondition> {
   QueryBuilder<Item, Item, QAfterFilterCondition> userIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'user', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> category(
-      FilterQuery<Category> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'category');
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> categoryIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'category', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> photo(FilterQuery<Photo> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'photo');
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> photoIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'photo', 0, true, 0, true);
     });
   }
 }

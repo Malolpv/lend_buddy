@@ -13,8 +13,6 @@ class Lend {
 
   final item = IsarLink<Item>();
   final user = IsarLink<User>();
-  final photo = IsarLink<Photo>();
-  final contact = IsarLink<Contact>();
 
   bool isReturned = false;
   DateTime? startDate, endDate;

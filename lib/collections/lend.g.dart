@@ -51,18 +51,6 @@ const LendSchema = CollectionSchema(
       name: r'user',
       target: r'User',
       single: true,
-    ),
-    r'photo': LinkSchema(
-      id: -2210441312915864123,
-      name: r'photo',
-      target: r'Photo',
-      single: true,
-    ),
-    r'contact': LinkSchema(
-      id: -8718753660679716611,
-      name: r'contact',
-      target: r'Contact',
-      single: true,
     )
   },
   embeddedSchemas: {},
@@ -129,15 +117,13 @@ Id _lendGetId(Lend object) {
 }
 
 List<IsarLinkBase<dynamic>> _lendGetLinks(Lend object) {
-  return [object.item, object.user, object.photo, object.contact];
+  return [object.item, object.user];
 }
 
 void _lendAttach(IsarCollection<dynamic> col, Id id, Lend object) {
   object.id = id;
   object.item.attach(col, col.isar.collection<Item>(), r'item', id);
   object.user.attach(col, col.isar.collection<User>(), r'user', id);
-  object.photo.attach(col, col.isar.collection<Photo>(), r'photo', id);
-  object.contact.attach(col, col.isar.collection<Contact>(), r'contact', id);
 }
 
 extension LendQueryWhereSort on QueryBuilder<Lend, Lend, QWhere> {
@@ -441,31 +427,6 @@ extension LendQueryLinks on QueryBuilder<Lend, Lend, QFilterCondition> {
   QueryBuilder<Lend, Lend, QAfterFilterCondition> userIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'user', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<Lend, Lend, QAfterFilterCondition> photo(FilterQuery<Photo> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'photo');
-    });
-  }
-
-  QueryBuilder<Lend, Lend, QAfterFilterCondition> photoIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'photo', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<Lend, Lend, QAfterFilterCondition> contact(
-      FilterQuery<Contact> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'contact');
-    });
-  }
-
-  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'contact', 0, true, 0, true);
     });
   }
 }

@@ -49,23 +49,31 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [Text("Add")],
+                  children: const [
+                    Text(
+                      "Add a new lend",
+                      style: TextStyle(fontSize: 30),
+                    )
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      NewLend(userId: userId, datasource: db)));
-                        },
-                        child: const Icon(
-                          Icons.add,
-                          size: 30,
-                        )),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey.shade800),
+                      child: const Icon(
+                        Icons.add,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NewLend(userId: userId, datasource: db)));
+                      },
+                    ),
                   ],
                 )
               ],

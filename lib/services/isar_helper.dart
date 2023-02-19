@@ -99,6 +99,6 @@ class IsarHelper {
 
   Future<bool> deleteLend(int id) async {
     final isar = await db;
-    return isar.lends.delete(id);
+    return isar.writeTxn(() => isar.lends.delete(id));
   }
 }

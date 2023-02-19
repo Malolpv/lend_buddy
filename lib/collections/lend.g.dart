@@ -17,18 +17,23 @@ const LendSchema = CollectionSchema(
   name: r'Lend',
   id: 2523108231016707381,
   properties: {
-    r'endDate': PropertySchema(
+    r'contact': PropertySchema(
       id: 0,
+      name: r'contact',
+      type: IsarType.string,
+    ),
+    r'endDate': PropertySchema(
+      id: 1,
       name: r'endDate',
       type: IsarType.dateTime,
     ),
     r'isReturned': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'isReturned',
       type: IsarType.bool,
     ),
     r'startDate': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'startDate',
       type: IsarType.dateTime,
     )
@@ -66,6 +71,12 @@ int _lendEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final value = object.contact;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -75,9 +86,10 @@ void _lendSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.endDate);
-  writer.writeBool(offsets[1], object.isReturned);
-  writer.writeDateTime(offsets[2], object.startDate);
+  writer.writeString(offsets[0], object.contact);
+  writer.writeDateTime(offsets[1], object.endDate);
+  writer.writeBool(offsets[2], object.isReturned);
+  writer.writeDateTime(offsets[3], object.startDate);
 }
 
 Lend _lendDeserialize(
@@ -87,10 +99,11 @@ Lend _lendDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Lend();
-  object.endDate = reader.readDateTimeOrNull(offsets[0]);
+  object.contact = reader.readStringOrNull(offsets[0]);
+  object.endDate = reader.readDateTimeOrNull(offsets[1]);
   object.id = id;
-  object.isReturned = reader.readBool(offsets[1]);
-  object.startDate = reader.readDateTimeOrNull(offsets[2]);
+  object.isReturned = reader.readBool(offsets[2]);
+  object.startDate = reader.readDateTimeOrNull(offsets[3]);
   return object;
 }
 
@@ -102,10 +115,12 @@ P _lendDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readBool(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 2:
+      return (reader.readBool(offset)) as P;
+    case 3:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -202,6 +217,150 @@ extension LendQueryWhere on QueryBuilder<Lend, Lend, QWhereClause> {
 }
 
 extension LendQueryFilter on QueryBuilder<Lend, Lend, QFilterCondition> {
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'contact',
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'contact',
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'contact',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'contact',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'contact',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'contact',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'contact',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'contact',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactContains(String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'contact',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactMatches(String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'contact',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'contact',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterFilterCondition> contactIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'contact',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Lend, Lend, QAfterFilterCondition> endDateIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -432,6 +591,18 @@ extension LendQueryLinks on QueryBuilder<Lend, Lend, QFilterCondition> {
 }
 
 extension LendQuerySortBy on QueryBuilder<Lend, Lend, QSortBy> {
+  QueryBuilder<Lend, Lend, QAfterSortBy> sortByContact() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'contact', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterSortBy> sortByContactDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'contact', Sort.desc);
+    });
+  }
+
   QueryBuilder<Lend, Lend, QAfterSortBy> sortByEndDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'endDate', Sort.asc);
@@ -470,6 +641,18 @@ extension LendQuerySortBy on QueryBuilder<Lend, Lend, QSortBy> {
 }
 
 extension LendQuerySortThenBy on QueryBuilder<Lend, Lend, QSortThenBy> {
+  QueryBuilder<Lend, Lend, QAfterSortBy> thenByContact() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'contact', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Lend, Lend, QAfterSortBy> thenByContactDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'contact', Sort.desc);
+    });
+  }
+
   QueryBuilder<Lend, Lend, QAfterSortBy> thenByEndDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'endDate', Sort.asc);
@@ -520,6 +703,13 @@ extension LendQuerySortThenBy on QueryBuilder<Lend, Lend, QSortThenBy> {
 }
 
 extension LendQueryWhereDistinct on QueryBuilder<Lend, Lend, QDistinct> {
+  QueryBuilder<Lend, Lend, QDistinct> distinctByContact(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'contact', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Lend, Lend, QDistinct> distinctByEndDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'endDate');
@@ -543,6 +733,12 @@ extension LendQueryProperty on QueryBuilder<Lend, Lend, QQueryProperty> {
   QueryBuilder<Lend, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Lend, String?, QQueryOperations> contactProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'contact');
     });
   }
 

@@ -14,6 +14,8 @@ class Lend {
   final item = IsarLink<Item>();
   final user = IsarLink<User>();
 
+  String? contact;
+
   bool isReturned = false;
   DateTime? startDate, endDate;
 
